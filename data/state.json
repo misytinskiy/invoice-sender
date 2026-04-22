@@ -1,0 +1,11 @@
+{
+  "globalNextNumber": 45,
+  "companies": {
+    "company_a": {
+      "lastSuccessDate": "April 21, 2026",
+      "lastInvoiceNumber": "000044",
+      "lastInvoiceDate": "April 21, 2026",
+      "lastPeriodLabel": "April 2026"
+    }
+  }
+}
