@@ -7,6 +7,8 @@ const requiredEnvKeys = [
   "TELEGRAM_BOT_TOKEN",
   "CRON_SECRET",
   "GLOBAL_START_NUMBER",
+  "UPSTASH_REDIS_REST_URL",
+  "UPSTASH_REDIS_REST_TOKEN",
   "COMPANY_A_DOC_ID",
   "COMPANY_A_TELEGRAM_CHAT_ID",
   "COMPANY_A_COMPANY_NAME",
@@ -22,7 +24,12 @@ const requiredEnvKeys = [
 type EnvKey = (typeof requiredEnvKeys)[number];
 
 type AppEnv = Record<
-  EnvKey | "COMPANY_A_ENABLED" | "COMPANY_B_ENABLED" | "COMPANY_A_INVOICE_PREFIX" | "COMPANY_B_INVOICE_PREFIX",
+  | EnvKey
+  | "COMPANY_A_ENABLED"
+  | "COMPANY_B_ENABLED"
+  | "COMPANY_A_INVOICE_PREFIX"
+  | "COMPANY_B_INVOICE_PREFIX"
+  | "STATE_REDIS_KEY",
   string
 >;
 
@@ -44,7 +51,10 @@ function readOptionalEnv(key: "COMPANY_A_ENABLED" | "COMPANY_B_ENABLED", fallbac
   return process.env[key] ?? fallback;
 }
 
-function readOptionalString(key: "COMPANY_A_INVOICE_PREFIX" | "COMPANY_B_INVOICE_PREFIX", fallback = ""): string {
+function readOptionalString(
+  key: "COMPANY_A_INVOICE_PREFIX" | "COMPANY_B_INVOICE_PREFIX" | "STATE_REDIS_KEY",
+  fallback = "",
+): string {
   return process.env[key] ?? fallback;
 }
 
@@ -75,6 +85,7 @@ export function getEnv(): AppEnv {
     COMPANY_B_ENABLED: readOptionalEnv("COMPANY_B_ENABLED", "true"),
     COMPANY_A_INVOICE_PREFIX: readOptionalString("COMPANY_A_INVOICE_PREFIX", ""),
     COMPANY_B_INVOICE_PREFIX: readOptionalString("COMPANY_B_INVOICE_PREFIX", ""),
+    STATE_REDIS_KEY: readOptionalString("STATE_REDIS_KEY", "invoice:state"),
   };
 }
 

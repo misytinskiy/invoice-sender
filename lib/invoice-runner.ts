@@ -1,4 +1,4 @@
-import { matchesCronExpression } from "@/lib/cron";
+import { matchesCronDate } from "@/lib/cron";
 import { formatInvoiceDate, formatInvoiceNumber, formatPeriodLabel } from "@/lib/date-time";
 import { getCompanyConfigs, getEnv, parsePositiveInt } from "@/lib/env";
 import { GoogleDocsService } from "@/lib/google/docs";
@@ -29,7 +29,7 @@ export async function runInvoices(now = new Date()): Promise<CompanyRunResult[]>
       continue;
     }
 
-    if (!matchesCronExpression(company.scheduleCron, now, company.timezone)) {
+    if (!matchesCronDate(company.scheduleCron, now, company.timezone)) {
       results.push({ companyKey: company.companyKey, status: "skipped", reason: "schedule_mismatch" });
       continue;
     }

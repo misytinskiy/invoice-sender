@@ -77,3 +77,19 @@ export function matchesCronExpression(cronExpr: string, now: Date, timeZone: str
     matchesField(dowExpr, parts.dayOfWeek, 0, 7, true)
   );
 }
+
+export function matchesCronDate(cronExpr: string, now: Date, timeZone: string): boolean {
+  const [, , domExpr, monthExpr, dowExpr] = cronExpr.trim().split(/\s+/);
+
+  if (!domExpr || !monthExpr || !dowExpr) {
+    return false;
+  }
+
+  const parts = getCronDateParts(now, timeZone);
+
+  return (
+    matchesField(domExpr, parts.dayOfMonth, 1, 31) &&
+    matchesField(monthExpr, parts.month, 1, 12) &&
+    matchesField(dowExpr, parts.dayOfWeek, 0, 7, true)
+  );
+}

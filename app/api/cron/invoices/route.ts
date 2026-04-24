@@ -7,16 +7,18 @@ function unauthorizedResponse() {
   return Response.json({ ok: false, error: "Unauthorized" }, { status: 401 });
 }
 
-export async function GET() {
-  return Response.json({ ok: true, message: "Invoice cron endpoint is alive." });
+function getBearerToken(request: Request): string {
+  const authHeader = request.headers.get("authorization");
+
+  if (!authHeader?.startsWith("Bearer ")) {
+    return "";
+  }
+
+  return authHeader.slice("Bearer ".length);
 }
 
-export async function POST(request: Request) {
-  const authHeader = request.headers.get("authorization");
-  const token = authHeader?.startsWith("Bearer ")
-    ? authHeader.slice("Bearer ".length)
-    : "";
-
+async function runCron(request: Request) {
+  const token = getBearerToken(request);
   const { CRON_SECRET } = getEnv();
 
   if (!token || token !== CRON_SECRET) {
@@ -36,4 +38,12 @@ export async function POST(request: Request) {
     },
     results,
   });
+}
+
+export async function GET(request: Request) {
+  return runCron(request);
+}
+
+export async function POST(request: Request) {
+  return runCron(request);
 }
