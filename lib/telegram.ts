@@ -19,12 +19,13 @@ export class TelegramService {
     fileName: string;
     caption: string;
   }): Promise<TelegramSendResult> {
+    const pdfBytes = Uint8Array.from(input.fileBuffer);
     const formData = new FormData();
     formData.append("chat_id", input.chatId);
     formData.append("caption", input.caption);
     formData.append(
       "document",
-      new Blob([input.fileBuffer], { type: "application/pdf" }),
+      new Blob([pdfBytes], { type: "application/pdf" }),
       input.fileName,
     );
 
